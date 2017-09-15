@@ -1,0 +1,22 @@
+{
+  "name": "nemesis-framework",
+  "version": "1.0.0",
+  "description": "Nemesis SDK",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^8.0.26",
+    "typescript": "^2.5.2"
+  },
+  "dependencies": {
+    "@types/request": "^2.0.3",
+    "request": "^2.81.0",
+    "typescript-starter": "^1.4.1"
+  }
+}
