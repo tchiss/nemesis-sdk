@@ -1,89 +1,7 @@
+/// <reference path="../types/nemesis.d.ts" />
+import * as Definition from "Definition";
+
 import request = require("request");
-
-export interface IPagingResult <T>{
-    count?: number;
-    content?: Array<T>;
-}
-
-export interface ICompetition {
-    id: number;
-    caption: string;
-    league: string;
-    year: number;
-    numberOfTeams: number;
-    numberOfGames: number;
-    lastUpdated: Date;
-}
-
-export interface IResult {
-    goalsHomeTeam: number;
-    goalsAwayTeam: number;
-}
-
-export interface IFixture {
-    id: number;
-    competitionId: number;
-    date: Date;
-    matchday: number;
-    homeTeamName: string;
-    homeTeamId: number;
-    awayTeamName: string;
-    awayTeamId: string;
-    result: IResult;
-}
-
-export interface ITeam {
-    id: number;
-    name: string;
-    shortName: string;
-    squadMarketValue: string;
-    crestUrl: string;
-}
-
-export interface IPlayer {
-    id: number;
-    name: string;
-    position: string;
-    jerseyNumber: number;
-    dateOfBirth: Date;
-    nationality: string;
-    contractUntil: Date;
-    marketValue: number;
-}
-
-export interface  LeagueTable {
-    rank: number;
-    team: string;
-    teamId: number;
-    playedGames: number;
-    crestURI: string;
-    points: number;
-    goals: number;
-    goalsAgainst: number;
-    goalDifference: number;
-}
-
-export interface INemesisFeature {
-    /**
-     * url Root Setter
-     */
-    setRootUrl: (rootUrl: string) => void;
-
-    /**
-     * url Root Getter
-     */
-    getRootUrl: () => string;
-
-    /**
-     * List all available competitions.
-     */
-    getCompetitions: (year: number) => any;
-
-    /**
-     * List all fixtures for a certain competition.
-     */
-    getFixturesByCompetition: (competitionId: number, matchday: number) => any;
-}
 
 export abstract class NemesisFeature {
     constructor() {
@@ -123,8 +41,9 @@ type inputArguments = {
     URL_ROOT: string
 }
 
-export class Nemesis extends NemesisFeature implements INemesisFeature {
+export default class Nemesis extends NemesisFeature implements Definition.INemesisFeature {
     public args: inputArguments;
+    public toto: Definition.ICompetition;
     constructor(apiToken: string, private rootUrl: string, ) {
         super();
         this.init();
@@ -152,9 +71,9 @@ export class Nemesis extends NemesisFeature implements INemesisFeature {
     }
 
     public getCompetitions(year: number): any {
-        let response: IPagingResult<ICompetition> = {};
+        let response: Definition.IPagingResult<Definition.ICompetition> = {};
         return request.get(this.getRootUrl() + `competitions/?season=${year}`)
-            .on("response", (_response: IPagingResult<ICompetition>) => {
+            .on("response", (_response: Definition.IPagingResult<Definition.ICompetition>) => {
                 response = _response;
             })
             .on("error", (error) => {
@@ -163,9 +82,9 @@ export class Nemesis extends NemesisFeature implements INemesisFeature {
     }
 
     public getFixturesByCompetition(competitionId: number, matchday: number): any {
-        let response: IFixture[] = [];
+        let response: Definition.IFixture[] = [];
         request.get(this.getRootUrl() + `competitions/${competitionId}/fixtures/matchday=${matchday}`)
-            .on("response", (_response: IFixture[]) => {
+            .on("response", (_response: Definition.IFixture[]) => {
                 response = _response
                 return _response;
             })

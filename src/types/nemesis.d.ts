@@ -1,5 +1,5 @@
 
-export declare module Nemesis {
+declare module "Definition" {
     export interface IPagingResult <T>{
         count?: number;
         content?: Array<T>;

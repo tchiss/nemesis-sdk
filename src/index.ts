@@ -1,1 +1,1 @@
-import { NemesisFeature } from "./libs/nemesis";
+import Nemesis  from "./libs/nemesis";
