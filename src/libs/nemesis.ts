@@ -85,15 +85,68 @@ export interface INemesisFeature {
     getFixturesByCompetition: (competitionId: number, matchday: number) => any;
 }
 
-export abstract class NemesisFeature implements INemesisFeature {
-    constructor(private rootUrl: string) {
+export abstract class NemesisFeature {
+    constructor() {
         ;
+    }
+
+    /**
+     * 
+     * @param rootUrl 
+     */
+    abstract setRootUrl(rootUrl: string): void;
+
+    /**
+     * 
+     */
+    abstract getRootUrl(): string;
+
+    /**
+     * 
+     * @param year
+     * @description retrieve all competition by a specific year
+     * @return a list of competitions
+     */
+    abstract getCompetitions(year: number): any;
+
+    /**
+     * @param competitionId
+     * @param matchday
+     * @description retrieve fixtures by a specific competition
+     * @return a list of fixtures
+     */
+    abstract getFixturesByCompetition(competitionId: number, matchday: number): any;
+}
+
+type inputArguments = {
+    API_TOKEN: string,
+    URL_ROOT: string
+}
+
+export class Nemesis extends NemesisFeature implements INemesisFeature {
+    public args: inputArguments;
+    constructor(apiToken: string, private rootUrl: string, ) {
+        super();
+        this.init();
+    }
+
+    public help() {
+        console.log("Get started");
+        console.log("Usage");
+        console.log("nemesis --apiToken API_TOKEN --urlROOT URL_ROOT");
+        console.log("npm start --apiToken API_TOKEN --urlROOT URL_ROOT");
+    }
+
+    public init(): void {
+        this.args = {
+            API_TOKEN: "",
+            URL_ROOT: ""
+        }
     }
 
     public setRootUrl(rootUrl: string): void {
         this.rootUrl = rootUrl;
     }
-
     public getRootUrl(): string {
         return this.rootUrl;
     }
@@ -120,18 +173,5 @@ export abstract class NemesisFeature implements INemesisFeature {
                 throw Error(error.message)
             });
         return response;
-    }
-}
-
-export class Nemesis extends NemesisFeature {
-    constructor(rootUrl: string) {
-        super(rootUrl);
-    }
-
-    public help() {
-        console.log("Get started");
-        console.log("Usage");
-        console.log("nemesis --apiToken API_TOKEN --urlROOT URL_ROOT");
-        console.log("npm start --apiToken API_TOKEN --urlROOT URL_ROOT");
     }
 }
